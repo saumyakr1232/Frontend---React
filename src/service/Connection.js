@@ -1,4 +1,5 @@
 import axios from "axios";
+import AuthenticationManager from "./authManager";
 const Authorization_authenticate= "http://localhost:8400/auth/authenticate"
 const Authorization_authorize="http://localhost:8400/auth/authorize"
 const member_viewBills="http://localhost:8100/member/viewbills/"
@@ -6,7 +7,7 @@ const claim_submitClaim="http://localhost:8200/claim/submitclaim/"
 const claimstatus = "http://localhost:8200/claim/getclaimstatus/"
 const claimIds = "http://localhost:8200/claim/getclaimIds/"
 
-
+const authManager  = new AuthenticationManager();
 class Connection{
     async getToken(creds) {
         try {
@@ -47,7 +48,11 @@ class Connection{
         // var url = claim_submitClaim +mid+'/'+pid+'/'+Amount+'/'+hospitalName
         var url = claim_submitClaim +mid+'/'+pid
         
-        var bench = await axios.post(url,body)
+        var bench = await axios.post(url,body,{
+            headers: {
+                'Authorization': `Bearer ${authManager.getAccessToken()}`
+            },
+        })
             .then(response => {
                 if (response.data != null) {
                   //  console.log("viewBills ", response);
@@ -60,7 +65,11 @@ class Connection{
     async viewBills(mid,pid) {
         console.log("Inside viewBills");
         console.log(mid,pid);
-        var bench = await axios.get(member_viewBills+mid+'/'+pid)
+        var bench = await axios.get(member_viewBills+mid+'/'+pid, {
+            headers: {
+                'Authorization': `Bearer ${authManager.getAccessToken()}`
+            },
+        })
             .then(response => {
                 if (response.data != null) {
                     console.log("viewBills ", response);
@@ -73,7 +82,11 @@ class Connection{
     async viewClaimStatus(mid,pid,cid) {
         console.log("Inside view claim status");
 
-        var bench = await axios.get(claimstatus+mid+'/'+pid+'/'+cid)
+        var bench = await axios.get(claimstatus+mid+'/'+pid+'/'+cid, {
+            headers: {
+                'Authorization': `Bearer ${authManager.getAccessToken()}`
+            },
+        })
             .then(response => {
                 if (response.data != null) {
                   //  console.log("viewBills ", response);
@@ -84,7 +97,11 @@ class Connection{
     }
 
     async getClaimIds(mid, pid){
-        var bench = await axios.get(claimIds+mid+'/' + pid).then(response => {
+        var bench = await axios.get(claimIds+mid+'/' + pid, {
+            headers: {
+                'Authorization': `Bearer ${authManager.getAccessToken()}`
+            },
+        }).then(response => {
             if( response.data != null){
                 console.log("claims " + response.body)
                 return response;

@@ -128,7 +128,7 @@ const Login = () => {
 
                     <label htmlFor="hospitalName"><b>Hospital:</b></label>
                     <div>
-                        <Select name="hospitalName" id="hospitalName" options={hospitals} value={selectedHospital} onChange={handleHospitalChange} />
+                        <Select name="hospitalName" id="hospitalName" options={hospitals} onChange={handleHospitalChange} />
 
                     </div>
 
