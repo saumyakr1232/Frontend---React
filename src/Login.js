@@ -3,6 +3,7 @@ import AuthenticationManager from './service/authManager';
 import Connection from './service/Connection'
 import { Link, useNavigate } from 'react-router-dom';
 import './index.css'
+import useAuth from './service/useAuth';
 
 
 const authManager = new AuthenticationManager();
@@ -14,6 +15,7 @@ const Login = () => {
     const [pwd, setPwd] = useState('');
     const [errMsg, setErrMsg] = useState('');
     const [success, setSuccess] = useState(false);
+    const {login} = useAuth();
 
     useEffect(() => {
         userRef.current.focus();
@@ -43,12 +45,20 @@ const Login = () => {
             console.log("Request", request);
             console.log("token ", token.data);
             console.log("Response ", response.data);
-            console.log("saved token ", authManager.getAccessToken());
-            
+           
+
             authManager.updateToken(token.data);
 
+
             console.log("saved token ", authManager.getAccessToken());
-            navigate("/home")
+
+            
+
+            login().then(() => {
+                navigate("/home")
+            });
+
+            
         }
     }
     return (

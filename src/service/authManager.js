@@ -72,10 +72,13 @@ class AuthenticationManager {
         this._token = token;
         this._processToken(token);
         if (token) {
+            console.log("update token called eith ", token)
             window.localStorage.setItem(tokenKey, JSON.stringify(token));
+            return this.getAccessToken();
         }
         else {
             window.localStorage.removeItem(tokenKey);
+            return this.getAccessToken();
         }
     }
 
@@ -84,7 +87,7 @@ class AuthenticationManager {
         if (!result) {
             return "";
         }
-        return JSON.parse(result).accessToken;
+        return JSON.parse(result);
     }
 
     getRefreshToken() {

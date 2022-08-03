@@ -1,7 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import useAuth from '../service/useAuth';
 
 export default function NavBar() {
+
     return (
         <nav className="navbar navbar-expand-lg navbar-dark mainNavBar">
             <Link to="/home">
@@ -38,7 +40,7 @@ export default function NavBar() {
                     </li>
 
                     <li class="nav-item active">
-                        <Link to="/">
+                        <Link to="/login">
                             <a class="nav-link" href="#">Log Out<span class="sr-only">(current)</span></a>
                         </Link>
                     </li>
