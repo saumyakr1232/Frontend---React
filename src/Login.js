@@ -1,11 +1,11 @@
 import { useRef, useState, useEffect } from 'react';
-
+import AuthenticationManager from './service/authManager';
 import Connection from './service/Connection'
 import { Link, useNavigate } from 'react-router-dom';
 import './index.css'
 
 
-
+const authManager = new AuthenticationManager();
 
 const Login = () => {
     const userRef = useRef();
@@ -22,10 +22,10 @@ const Login = () => {
     useEffect(() => {
         setErrMsg('');
     }, [user, pwd])
-    const navigate=useNavigate()
+    const navigate = useNavigate()
 
     const handleSubmit = async (e) => {
-       
+
         e.preventDefault()
         var uname = document.getElementById("username").value
         var pass = document.getElementById("password").value
@@ -34,18 +34,22 @@ const Login = () => {
             password: pass
         }
         var token = await Connection.getToken(request)
-        if  (token==="Request failed with status code 401"){
+        if (token === "Request failed with status code 401") {
             alert("Please check the credentials!!")
-        } else{
-   
-        
-        var response = await Connection.userValidate(token.data);
-        console.log("Request", request);
-        console.log("token ", token.data);
-        console.log("Response ", response.data);
-          
-           navigate("/home")
-         }
+        } else {
+
+
+            var response = await Connection.userValidate(token.data);
+            console.log("Request", request);
+            console.log("token ", token.data);
+            console.log("Response ", response.data);
+            console.log("saved token ", authManager.getAccessToken());
+            
+            authManager.updateToken(token.data);
+
+            console.log("saved token ", authManager.getAccessToken());
+            navigate("/home")
+        }
     }
     return (
         <>{success ? (
@@ -66,7 +70,7 @@ const Login = () => {
                 <div className='mainScreen'>
                     <div className='mainLeft'>
                         <h1> Claims Management</h1>
-                        
+
                         <h1> System</h1>
                     </div>
                     <div className='mainRight'>
@@ -79,8 +83,8 @@ const Login = () => {
 
 
                                 <label htmlFor="password">Password:</label>
-                                <input type="password" id="password"  placeholder="Enter Password" onChange={(e) => setPwd(e.target.value)} value={pwd} required />
-                    
+                                <input type="password" id="password" placeholder="Enter Password" onChange={(e) => setPwd(e.target.value)} value={pwd} required />
+
                                 <button type="submit">
                                     Sign In
                                 </button>
