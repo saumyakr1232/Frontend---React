@@ -3,6 +3,17 @@ import { Link } from 'react-router-dom'
 import useAuth from '../service/useAuth';
 
 export default function NavBar() {
+    const {logout} = useAuth();
+
+
+
+    function handleLogOut(){
+        logout().then(() =>{
+                console.log("Logging out");
+        });
+    }
+
+
 
     return (
         <nav className="navbar navbar-expand-lg navbar-dark mainNavBar">
@@ -41,7 +52,7 @@ export default function NavBar() {
 
                     <li class="nav-item active">
                         <Link to="/login">
-                            <a class="nav-link" href="#">Log Out<span class="sr-only">(current)</span></a>
+                            <a class="nav-link" href="#" onClick={handleLogOut}>Log Out<span class="sr-only">(current)</span></a>
                         </Link>
                     </li>
 
